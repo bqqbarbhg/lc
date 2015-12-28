@@ -42,7 +42,7 @@ function loadAtlas(url)
 				var texture = new Texture(image);
 				textures.push(texture);
 				resolve(texture);
-			}
+			};
 			image.onerror = reject;
 			image.src = url + ".png";
 		});

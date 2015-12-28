@@ -19,13 +19,13 @@ function render()
 		mat23Rotation(Math.sin(DEBUGTime * 2.0) * 0.2),
 		mat23Translate([0.0, height]));
 
-	var lbase = sprites['lbase'];
+	var lbase = sprites.lbase;
 	spriteBatch.draw(lbase, mulMat23(base, [
 			lbase.aspect, 0, 0,
 			0, 1, 0,
 	]));
 
-	var lrotor = sprites['lrotor'];
+	var lrotor = sprites.lrotor;
 	spriteBatch.draw(lrotor, mulMat23(base, [
 			Math.sin(DEBUGTime * 8.0) * 0.5, 0, -0.03,
 			0, 1 / lrotor.aspect * 0.5, -0.43,

@@ -1,0 +1,8 @@
+{
+  "name": "lc",
+  "main": "src/server.js",
+  "license": "MIT",
+  "dependencies": {
+    "fetch": "~0.10.1"
+  }
+}

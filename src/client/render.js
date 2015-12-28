@@ -8,8 +8,8 @@ function createGL(canvas)
 		preserveDrawingBuffer: false,
 	};
 
-	return canvas.getContext("webgl", attributes)
-		|| canvas.getContext("experimental-webgl", attributes);
+	return canvas.getContext("webgl", attributes) ||
+			canvas.getContext("experimental-webgl", attributes);
 }
 
 function compileShader(source, type)
@@ -162,7 +162,7 @@ SpriteBatch.prototype.draw = function(sprite, transform, color)
 	}
 
 	this.batchIndex += 1;
-}
+};
 
 SpriteBatch.prototype.flush = function()
 {
@@ -201,5 +201,5 @@ SpriteBatch.prototype.flush = function()
 
 	this.batchIndex = 0;
 	this.texture = null;
-}
+};
 
