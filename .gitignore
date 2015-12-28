@@ -35,3 +35,6 @@ build/*
 
 # content
 dist/data/*
+
+# assets
+assets/

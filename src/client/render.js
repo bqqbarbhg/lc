@@ -171,7 +171,7 @@ SpriteBatch.prototype.flush = function()
 		var verts = this.vertexData.subarray(0, vertCount);
 
 		gl.enable(gl.BLEND);
-		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+		gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);

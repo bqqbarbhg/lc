@@ -23,10 +23,10 @@ function Sprite(texture, frame)
 	this.frame = {
 		x: frame.x / texture.width,
 		y: frame.y / texture.height,
-		width: frame.width / texture.width,
-		height: frame.height / texture.height,
+		width: frame.w / texture.width,
+		height: frame.h / texture.height,
 	};
-	this.aspect = frame.width / frame.height;
+	this.aspect = frame.w / frame.h;
 }
 
 var textures = [];
