@@ -38,3 +38,6 @@ dist/data/*
 
 # assets
 assets/
+
+# vagrant
+.vagrant/
