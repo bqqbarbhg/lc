@@ -76,6 +76,27 @@ void main() {
 
 `;
 
+var globalSpriteBatchShader = null;
+
+function makeSpriteBatchShader()
+{
+	var vertexShader = compileShader(spriteVertexSrc, gl.VERTEX_SHADER);
+	var fragmentShader = compileShader(spriteFragmentSrc, gl.FRAGMENT_SHADER);
+
+	var program = linkProgram(vertexShader, fragmentShader);
+
+	return {
+		program: program,
+
+		aPosition: gl.getAttribLocation(program, "a_position"),
+		aTexCoord: gl.getAttribLocation(program, "a_texCoord"),
+		aColor: gl.getAttribLocation(program, "a_color"),
+
+		uTransform: gl.getUniformLocation(program, "u_transform"),
+		uTexture: gl.getUniformLocation(program, "u_texture"),
+	};
+}
+
 function SpriteBatch()
 {
 	// XY, UV, RGBA
@@ -89,20 +110,13 @@ function SpriteBatch()
 
 	this.indexBuffer = gl.createBuffer();
 
-	var vertexShader = compileShader(spriteVertexSrc, gl.VERTEX_SHADER);
-	var fragmentShader = compileShader(spriteFragmentSrc, gl.FRAGMENT_SHADER);
-	this.program = linkProgram(vertexShader, fragmentShader);
-
-	this.aPosition = gl.getAttribLocation(this.program, "a_position");
-	this.aTexCoord = gl.getAttribLocation(this.program, "a_texCoord");
-	this.aColor = gl.getAttribLocation(this.program, "a_color");
-
-	this.uTransform = gl.getUniformLocation(this.program, "u_transform");
-	this.uTexture = gl.getUniformLocation(this.program, "u_texture");
+	if (!globalSpriteBatchShader) {
+		globalSpriteBatchShader = makeSpriteBatchShader();
+	}
 
 	this.transform = new Float32Array([
 			1, 0, 0, 0,
-			0, -(canvas.width / canvas.height), 0, 0,
+			0, 1, 0, 0,
 			0, 0, 1, 0,
 			0, 0, 0, 1,
 	]);
@@ -137,7 +151,7 @@ SpriteBatch.prototype.draw = function(sprite, transform, color)
 	var vertexIndex = this.batchIndex * 4 * this.VERTEX_SIZE;
 
 	var frame = sprite.frame;
-	var verts = [[-0.5, -0.5], [0.5, -0.5], [-0.5, 0.5], [0.5, 0.5]];
+	var verts = [[-0.5, 0.5], [0.5, 0.5], [-0.5, -0.5], [0.5, -0.5]];
 	var uvs = [
 		[frame.x, frame.y],
 		[frame.x + frame.width, frame.y],
@@ -170,6 +184,8 @@ SpriteBatch.prototype.flush = function()
 		var vertCount = this.batchIndex * this.VERTEX_SIZE * 4;
 		var verts = this.vertexData.subarray(0, vertCount);
 
+		var shader = globalSpriteBatchShader;
+
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -178,7 +194,7 @@ SpriteBatch.prototype.flush = function()
 
 		gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STREAM_DRAW);
 
-		gl.useProgram(this.program);
+		gl.useProgram(shader.program);
 
 		gl.enableVertexAttribArray(0);
 		gl.enableVertexAttribArray(1);
@@ -187,13 +203,13 @@ SpriteBatch.prototype.flush = function()
 		gl.activeTexture(gl.TEXTURE0 + 0);
 		gl.bindTexture(gl.TEXTURE_2D, this.texture.texture);
 
-		gl.uniformMatrix4fv(this.uTransform, false, this.transform);
-		gl.uniform1i(this.uTexture, 0);
+		gl.uniformMatrix4fv(shader.uTransform, false, this.transform);
+		gl.uniform1i(shader.uTexture, 0);
 
 		var stride = this.VERTEX_SIZE * 4;
-		gl.vertexAttribPointer(this.aPosition, 2, gl.FLOAT, gl.FALSE, stride, 0);
-		gl.vertexAttribPointer(this.aTexCoord, 2, gl.FLOAT, gl.FALSE, stride, 2 * 4);
-		gl.vertexAttribPointer(this.aColor, 4, gl.FLOAT, gl.FALSE, stride, 4 * 4);
+		gl.vertexAttribPointer(shader.aPosition, 2, gl.FLOAT, gl.FALSE, stride, 0);
+		gl.vertexAttribPointer(shader.aTexCoord, 2, gl.FLOAT, gl.FALSE, stride, 2 * 4);
+		gl.vertexAttribPointer(shader.aColor, 4, gl.FLOAT, gl.FALSE, stride, 4 * 4);
 		
 		var indexCount = this.batchIndex * 6;
 		gl.drawElements(gl.TRIANGLES, indexCount, gl.UNSIGNED_SHORT, 0);

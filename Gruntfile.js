@@ -16,6 +16,8 @@ module.exports = function(grunt) {
 					'src/client/math.js',
 					'src/client/content.js',
 					'src/client/render.js',
+					'src/client/game.js',
+					'src/client/game_render.js',
 					'src/client/main.js',
 				],
 				dest: 'build/lc.concat.js',

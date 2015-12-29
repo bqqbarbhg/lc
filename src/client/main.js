@@ -2,39 +2,56 @@
 var canvas = document.getElementById("game_canvas");
 var gl = createGL(canvas);
 
-var spriteBatch = new SpriteBatch();
 
-var DEBUGTime = 0.0;
+var game = new Game();
+game.renderInit();
+
+var gameInput = { up: false };
 
 function render()
 {
 	gl.clearColor(0x64/255.0, 0x95/255.0, 0xED/255.0, 1.0);
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	DEBUGTime += 0.016;
+	game.tick(0.016, gameInput);
+	game.render();
 
-	var height = Math.sin(DEBUGTime) * 0.1;
-
-	var base = mulMat23(
-		mat23Rotation(Math.sin(DEBUGTime * 2.0) * 0.2),
-		mat23Translate([0.0, height]));
-
-	var lbase = sprites['head/base/normal.png'];
-	spriteBatch.draw(lbase, mulMat23(base, [
-			lbase.aspect, 0, 0,
-			0, 1, 0,
-	]));
-
-	var lrotor = sprites['head/rotor/normal.png'];
-	spriteBatch.draw(lrotor, mulMat23(base, [
-			Math.sin(DEBUGTime * 8.0) * 0.5, 0, -0.03,
-			0, 1 / lrotor.aspect * 0.5, -0.43,
-	]));
-
-	spriteBatch.flush();
+	// HACK!
+	if (game.player.y < 0.0 || game.player.y > 10.0) {
+		game = new Game();
+		game.renderInit();
+	}
 
 	window.requestAnimationFrame(render);
 }
+
+document.addEventListener('keydown', e => {
+	switch (e.keyCode) {
+	case 38:
+		gameInput.up = true;
+		break;
+	}
+});
+
+document.addEventListener('keyup', e => {
+	switch (e.keyCode) {
+	case 38:
+		gameInput.up = false;
+		break;
+	}
+});
+
+document.addEventListener('touchstart', e => {
+	gameInput.up = true;
+	e.preventDefault();
+	return false;
+});
+
+document.addEventListener('touchend', e => {
+	gameInput.up = false;
+	e.preventDefault();
+	return false;
+});
 
 loadAtlas("data/atlas")
 	.then(() => {
