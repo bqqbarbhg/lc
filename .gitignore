@@ -39,5 +39,8 @@ dist/
 # assets
 assets/
 
+# built assets
+data/
+
 # js dependencies
 src/js/vendor
