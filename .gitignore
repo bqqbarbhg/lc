@@ -31,10 +31,16 @@ bower_components
 .node_repl_history
 
 # intermediate build files
-build/*
+build/
 
-# content
-dist/data/*
+# dist folder
+dist/
 
 # assets
 assets/
+
+# built assets
+data/
+
+# js dependencies
+src/js/vendor

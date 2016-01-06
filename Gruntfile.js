@@ -1,31 +1,58 @@
 module.exports = function(grunt) {
 
+	var js_sources = [
+		'src/js/vendor/fetch/fetch.js',
+		'src/js/client/math.js',
+		'src/js/client/content.js',
+		'src/js/client/render.js',
+		'src/js/client/game.js',
+		'src/js/client/game_render.js',
+		'src/js/client/main.js',
+	];
+
 	grunt.initConfig({
 
 		pkg: grunt.file.readJSON('package.json'),
 
-		concat: {
-			options: {
-				separator: ';\n',
-				banner: '(function(){\n',
-				footer: '\n})();'
+		copy: {
+			html: {
+				expand: true,
+				cwd: 'src/html/',
+				src: '**/*.html',
+				dest: 'dist/'
 			},
-			dist: {
-				src: [
-					'bower_components/fetch/fetch.js',
-					'src/client/math.js',
-					'src/client/content.js',
-					'src/client/render.js',
-					'src/client/game.js',
-					'src/client/game_render.js',
-					'src/client/main.js',
-				],
+			data: {
+				expand: true,
+				cwd: 'data/',
+				src: '**',
+				dest: 'dist/data/'
+			}
+		},
+
+		concat: {
+			release: {
+				options: {
+					separator: ';\n',
+					banner: '(function(){\n',
+					footer: '\n})();'
+				},
+				src: js_sources,
 				dest: 'build/lc.concat.js',
 			},
+
+			dev: {
+				options: {
+					separator: ';\n',
+					banner: '(function(){\n',
+					footer: '\n})();'
+				},
+				src: js_sources,
+				dest: 'dist/js/lc.js',
+			}
 		},
 
 		jshint: {
-			files: ['src/client/**/*.js'],
+			files: ['src/js/client/**/*.js'],
 			options: {
 				esnext: true
 			}
@@ -33,7 +60,6 @@ module.exports = function(grunt) {
 
 		babel: {
 			options: {
-				sourceMap: true,
 				presets: ['babel-preset-es2015']
 			},
 			dist: {
@@ -44,17 +70,47 @@ module.exports = function(grunt) {
 		},
 
 		uglify: {
-			my_target: {
+			release: {
 				files: {
 					'dist/js/lc.js': 'build/lc.js'
 				}
 			}
 		},
 
+		concurrent: {
+			options: {
+				logConcurrentOutput: true
+			},
+
+			dev: {
+				tasks: ['watch:dev', 'watch:html', 'watch:data']
+			},
+
+			release: {
+				tasks: ['watch:release', 'watch:html', 'watch:data']
+			}
+		},
+
 		watch: {
-			scripts: {
-				files: ['src/client/**/*.js'],
-				tasks: ['jshint', 'concat', 'babel', 'uglify']
+			release: {
+				files: ['src/js/client/**/*.js'],
+				tasks: ['jshint', 'concat:release', 'babel', 'uglify:release']
+			},
+
+			dev: {
+				files: ['src/js/client/**/*.js'],
+				tasks: ['jshint', 'concat:dev']
+
+			},
+
+			html: {
+				files: ['src/html/**/*.html'],
+				tasks: ['copy:html']
+			},
+
+			data: {
+				files: ['data/**'],
+				tasks: ['copy:data']
 			}
 		}
 
@@ -65,6 +121,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-babel');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-concurrent');
 
-	grunt.registerTask('default', ['watch']);
+	grunt.registerTask('default', ['copy:html', 'copy:data', 'jshint', 'concat:release', 'babel', 'uglify:release']);
+	grunt.registerTask('dev', ['copy:html', 'copy:data', 'jshint', 'concat:dev', 'concurrent:dev'])
+	grunt.registerTask('release', ['copy:html', 'copy:data', 'jshint', 'concat:release', 'babel', 'uglify:release', 'concurrent:release']);
 };
