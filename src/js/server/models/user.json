@@ -1,0 +1,21 @@
+{
+  "name": "User",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true,
+      "generated": true
+    },
+    "name": {
+      "type": "string",
+      "length": 32
+    },
+    "password": {
+      "type": "string",
+      "length": 256
+    }
+  },
+  "relations": {}
+}
