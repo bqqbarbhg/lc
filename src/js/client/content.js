@@ -34,34 +34,18 @@ var sprites = { };
 
 function loadAtlas(url)
 {
-	return new Promise(function(resolve, reject) {
+	var pTexture = loadImage(url + ".png")
+		.then(image => new Texture(image));
 
-		var pTexture = new Promise(function (resolve, reject) {
-			var image = new Image();
-			image.onload = () => {
-				var texture = new Texture(image);
-				textures.push(texture);
-				resolve(texture);
-			};
-			image.onerror = reject;
-			image.src = url + ".png";
-		});
+	var pJson = fetch(url + ".json")
+		.then(response => response.json());
 
-		var pJson = fetch(url + ".json")
-			.then(response => response.json());
-
-		Promise.all([pTexture, pJson])
-			.then(values => {
-				var texture = values[0];
-				var json = values[1];
-
-				for (var id in json) {
-					sprites[id] = new Sprite(texture, json[id]);
-				}
-
-				resolve();
-			})
-			.catch(reject);
-	});
+	return Promise.all([pTexture, pJson])
+		.then(splat((texture, json) => {
+			textures.push(texture);
+			for (var id in json) {
+				sprites[id] = new Sprite(texture, json[id]);
+			}
+		}));
 }
 

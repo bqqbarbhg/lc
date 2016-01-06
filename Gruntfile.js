@@ -2,6 +2,7 @@ module.exports = function(grunt) {
 
 	var js_sources = [
 		'src/js/vendor/fetch/fetch.js',
+		'src/js/client/util.js',
 		'src/js/client/math.js',
 		'src/js/client/content.js',
 		'src/js/client/render.js',
