@@ -7,6 +7,8 @@ module.exports = function(grunt) {
 		'src/js/client/math.js',
 		'src/js/client/content.js',
 		'src/js/client/render.js',
+		'src/js/client/shader/sprite_batch.js',
+		'src/js/client/sprite_batch.js',
 		'src/js/client/audio.js',
 		'src/js/client/game.js',
 		'src/js/client/game_render.js',

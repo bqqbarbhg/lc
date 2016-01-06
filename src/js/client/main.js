@@ -86,6 +86,8 @@ function loadGame()
 			window.requestAnimationFrame(render);
 			gameLoaded = true;
 		});
+
+	compileShaders();
 }
 
 window.addEventListener('load', loadGame);
