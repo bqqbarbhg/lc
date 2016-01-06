@@ -88,5 +88,5 @@ function loadGame()
 		});
 }
 
-loadGame();
+window.addEventListener('load', loadGame);
 
