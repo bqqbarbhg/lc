@@ -9,3 +9,5 @@ assets/tools/convert_mp3.py assets/audio data/mp3
 find data/mp3 -iname '*.mp3' | assets/tools/pack_binary.exe data/audio.json data/audio.bin data/mp3/
 rm -rf data/mp3
 
+cp -r assets/music data/
+
