@@ -18,6 +18,13 @@ module.exports = function(grunt) {
 				cwd: 'src/html/',
 				src: '**/*.html',
 				dest: 'dist/'
+			},
+
+			data: {
+				expand: true,
+				cwd: 'data/',
+				src: '**',
+				dest: 'dist/data/'
 			}
 		},
 
@@ -75,11 +82,11 @@ module.exports = function(grunt) {
 			},
 
 			dev: {
-				tasks: ['watch:dev', 'watch:html']
+				tasks: ['watch:dev', 'watch:html', 'watch:data']
 			},
-			
+
 			release: {
-				tasks: ['watch:release', 'watch:html']
+				tasks: ['watch:release', 'watch:html', 'watch:data']
 			}
 		},
 
@@ -98,6 +105,11 @@ module.exports = function(grunt) {
 			html: {
 				files: ['src/html/**/*.html'],
 				tasks: ['copy:html']
+			},
+
+			data: {
+				files: ['data/**'],
+				tasks: ['copy:data']
 			}
 		}
 
@@ -111,7 +123,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-concurrent');
 
-	grunt.registerTask('default', ['copy:html', 'jshint', 'concat:release', 'babel', 'uglify:release']);
-	grunt.registerTask('dev', ['copy:html', 'jshint', 'concat:dev', 'concurrent:dev'])
-	grunt.registerTask('release', ['copy:html', 'jshint', 'concat:release', 'babel', 'uglify:release', 'concurrent:release']);
+	grunt.registerTask('default', ['copy:html', 'copy:data', 'jshint', 'concat:release', 'babel', 'uglify:release']);
+	grunt.registerTask('dev', ['copy:html', 'copy:data', 'jshint', 'concat:dev', 'concurrent:dev'])
+	grunt.registerTask('release', ['copy:html', 'copy:data', 'jshint', 'concat:release', 'babel', 'uglify:release', 'concurrent:release']);
 };
