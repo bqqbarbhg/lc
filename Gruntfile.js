@@ -2,10 +2,12 @@ module.exports = function(grunt) {
 
 	var js_sources = [
 		'src/js/vendor/fetch/fetch.js',
+		'src/js/vendor/lodash/lodash.js',
 		'src/js/client/util.js',
 		'src/js/client/math.js',
 		'src/js/client/content.js',
 		'src/js/client/render.js',
+		'src/js/client/audio.js',
 		'src/js/client/game.js',
 		'src/js/client/game_render.js',
 		'src/js/client/main.js',
@@ -44,8 +46,8 @@ module.exports = function(grunt) {
 			dev: {
 				options: {
 					separator: ';\n',
-					banner: '(function(){\n',
-					footer: '\n})();'
+					banner: '',
+					footer: ''
 				},
 				src: js_sources,
 				dest: 'dist/js/lc.js',
@@ -125,7 +127,14 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-concurrent');
 
-	grunt.registerTask('default', ['copy:html', 'copy:data', 'jshint', 'concat:release', 'babel', 'uglify:release']);
-	grunt.registerTask('dev', ['copy:html', 'copy:data', 'jshint', 'concat:dev', 'concurrent:dev'])
-	grunt.registerTask('release', ['copy:html', 'copy:data', 'jshint', 'concat:release', 'babel', 'uglify:release', 'concurrent:release']);
+
+	grunt.registerTask('build_base', ['copy:html', 'copy:data', 'jshint'])
+
+	grunt.registerTask('build_dev', ['build_base', 'concat:dev'])
+	grunt.registerTask('build_release', ['build_base', 'concat:release', 'babel', 'uglify:release']);
+
+	grunt.registerTask('dev', ['build_dev', 'concurrent:dev'])
+	grunt.registerTask('release', ['build_release', 'concurrent:release']);
+
+	grunt.registerTask('default', ['build_release']);
 };

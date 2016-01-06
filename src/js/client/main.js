@@ -1,7 +1,7 @@
 
 var canvas = document.getElementById("game_canvas");
 var gl = createGL(canvas);
-
+var audio = new Audio();
 
 var game = new Game();
 game.renderInit();
@@ -20,6 +20,8 @@ function render()
 	if (game.player.y < 0.0 || game.player.y > 10.0) {
 		game = new Game();
 		game.renderInit();
+
+		audio.play(sounds["hit.mp3"]);
 	}
 
 	window.requestAnimationFrame(render);
@@ -53,8 +55,16 @@ document.addEventListener('touchend', e => {
 	return false;
 });
 
-loadAtlas("data/atlas")
-	.then(() => {
-		window.requestAnimationFrame(render);
-	});
+function loadGame()
+{
+	var pAtlas = loadAtlas("data/atlas");
+	var pAudio = loadAudio("data/audio");
+
+	Promise.all([pAtlas, pAudio])
+		.then(() => {
+			window.requestAnimationFrame(render);
+		});
+}
+
+loadGame();
 

@@ -3,6 +3,7 @@
   "main": "src/server.js",
   "license": "MIT",
   "dependencies": {
-    "fetch": "~0.10.1"
+    "fetch": "~0.10.1",
+    "lodash": "~3.10.1"
   }
 }
