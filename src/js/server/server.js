@@ -27,7 +27,7 @@ app.param('scoreId', (req, res, next, scoreId) => {
 });
 
 // routes
-app.get('/s', function (req, res, next) {
+app.get('/s', (req, res, next) => {
 	Score.find()
 	.then(scores => {
 		res.json(scores).end();
@@ -35,12 +35,12 @@ app.get('/s', function (req, res, next) {
 	}).catch(next);
 });
 
-app.get('/s/:scoreId', function (req, res, next) {
+app.get('/s/:scoreId', (req, res, next) => {
 	res.json(req.score).end();
 	next();
 });
 
-app.get('/r/:scoreId', function (req, res, next) {
+app.get('/r/:scoreId', (req, res, next) => {
 
 	// TODO: fetch replay for score
 
