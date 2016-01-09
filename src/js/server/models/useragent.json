@@ -1,5 +1,5 @@
 {
-  "name": "User",
+  "name": "UserAgent",
   "base": "PersistedModel",
   "idInjection": false,
   "properties": {
@@ -10,11 +10,7 @@
     },
     "name": {
       "type": "string",
-      "length": 32
-    },
-    "password": {
-      "type": "string",
-      "length": 256
+      "length": 8096
     }
   },
   "relations": {}

@@ -1,9 +1,9 @@
 {
-  "db": {
-    "name": "db",
-    "connector": "postgresql",
-    "username": "postgres",
-    "password": "root",
-    "database": "lc"
-  }
+	"db": {
+		"name": "db",
+		"connector": "postgresql",
+		"username": "postgres",
+		"password": "root",
+		"database": "lc"
+	}
 }
