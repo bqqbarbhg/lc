@@ -1,0 +1,46 @@
+{
+  "name": "Score",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true,
+      "generated": true
+    },
+
+    "score": {
+      "type": "number",
+      "required": true,
+      "postgresql": {
+        "dataType": "integer"
+      }
+    },
+
+    "timestamp": {
+      "type": "date",
+      "required": true,
+      "postgresql": {
+        "dataType": "timestamp"
+      }
+    },
+
+    "userAgentId": {
+      "type": "number",
+      "required": true
+    },
+
+    "replay": {
+      "type": "string",
+      "length": 32,
+      "required": true
+    }
+  },
+  "relations": {
+    "userAgent": {
+      "type": "belongsTo",
+      "model": "UserAgent",
+      "foreignKey": "userAgentId"
+    }
+  }
+}

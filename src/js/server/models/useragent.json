@@ -1,0 +1,17 @@
+{
+  "name": "UserAgent",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "properties": {
+    "id": {
+      "type": "number",
+      "id": true,
+      "generated": true
+    },
+    "name": {
+      "type": "string",
+      "length": 8096
+    }
+  },
+  "relations": {}
+}

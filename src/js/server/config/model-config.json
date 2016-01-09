@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/server/models",
+      "loopback/common/models",
+      "../models/"
+    ]
+  },
+
+  "Score": {
+    "dataSource": "db",
+    "public": "true"
+  },
+
+  "UserAgent": {
+    "dataSource": "db",
+    "public": "true"
+  }
+}
